@@ -1,0 +1,10 @@
+Package: imputation
+Type: Package
+Title: Several Imputation Methods Implemented in R
+Version: 0.1.0
+Author: Young Woong Min
+Maintainer: The package maintainer <jonathanheromin@gmail.com>
+Description: Introduces several functions in R utilizing methods like predictive modeling, regression, and KNN to impute missing values in data. The functions are currently a WORK IN PROGRESS. 
+License: NA
+Encoding: UTF-8
+LazyData: true
