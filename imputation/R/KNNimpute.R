@@ -9,28 +9,37 @@
 library(tidyverse)
 
 
-# Test data: Use only while writing package
-# xvalues <- sample(1:50, 10)
-# yvalues <- sample(1:2, 10, replace = TRUE)
-# for(i in 1:n){
-#   cars[xvalues[i], yvalues[i]] = NA
-# }
+#Test data: Use only while writing package
+xvalues <- sample(1:50, 10)
+yvalues <- sample(1:2, 10, replace = TRUE)
+n <- 5 #need to set n to a variable!
+
+#replaces values to NA in cars dataset by row index, col index
+for(i in 1:n){
+  cars[xvalues[i], yvalues[i]] = NA
+}
 
 
-# type <- sample(1:3, 50, replace = TRUE)
+type <- sample(1:3, 50, replace = TRUE)
 
-# cars <- cars %>% cbind(type)
-# cars <- cars %>% mutate(type = as.factor(type))
-# N <- (cars_clean %>% dim)[1]
+cars <- cars %>% cbind(type)
+cars <- cars %>% mutate(type = as.factor(type))
 
-# data = cars
-# data_clean = cars %>% drop_na()
+
+N <- (cars_clean %>% dim)[1] #cars_clean not initialized
+
+data = cars
+data_clean = cars %>% drop_na()
+
+N <- (data_clean %>% dim)[1] #to get row number of non-NA entries
 
 KNNimputation <- function(data, k = 10, method = "mean", split_categorical = FALSE){
   # This is a KNN imputation function
 
 
   ### Distance Metrics ###
+  
+  #NORM FUNCTION DOES NOT WORK WITH FACTORS 
   norm <- function(x){
     return(sqrt(sum(x^2)))
   }
@@ -39,6 +48,8 @@ KNNimputation <- function(data, k = 10, method = "mean", split_categorical = FAL
   ### Test Cases ###
   ############### Initialized and later delete #################
   #k = 5
+  #data <- data_clean[1:3][1,] for testing purposes only
+  
   if(sum(complete.cases(data)) <= k){
     stop("Not enough complete cases (cases without NAs).")
   }
@@ -54,7 +65,7 @@ KNNimputation <- function(data, k = 10, method = "mean", split_categorical = FAL
   }
 
   # Test: drops full NA rows
-  test = (dim(data)[2] == rowSums(data %>% is.na)) == FALSE
+  test = (dim(data)[2] == rowSums(data %>% is.na)) == FALSE #number of columns equal to sum of each row with 1 being NA value
   if(!all(test)){
     n = sum(!all(test))
     warning("Data frame contained rows with full NA's. " , as.character(n), " rows dropped.")
@@ -80,11 +91,16 @@ KNNimputation <- function(data, k = 10, method = "mean", split_categorical = FAL
   # 1) Quantitative Split
   data_numeric <- data[,sapply(data, class) == "numeric"]
   data_numeric_clean <- data_numeric %>% drop_na()
+  
+  #when is the dim(data_numeric %>% is.na) returning null?
   if (dim(data_numeric %>% is.na) %>% is.null){
     row_has_NA <- which(data_numeric %>% is.na)
   }else{
-    row_has_NA <- which((rowSums(data_numeric %>% is.na) %>% as.logical)) # we have a vector of indeces that contain an NA value
+    row_has_NA <- which((rowSums(data_numeric %>% is.na) %>% as.logical)) # we have a vector of indexes that contain an NA value
   }
+  
+  
+  #row_has_NA vector creation is conditional, will run an error when the above IF statement is false due to no initialization
   numNA <- length(row_has_NA)
   imputed_values = rep(9999, numNA)
   screen <- (data_numeric %>% is.na) == FALSE
@@ -103,6 +119,7 @@ KNNimputation <- function(data, k = 10, method = "mean", split_categorical = FAL
     }
 
     # Weighted Average Method
+    
     if(method == "weightAvg"){
       imputed_values[i] = agg(exp(-distance_metric[Kcluster_index]) * X[Kcluster_index, ])
     }else{
