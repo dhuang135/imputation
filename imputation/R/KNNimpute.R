@@ -10,9 +10,6 @@
 library(tidyverse)
 library(devtools)
 
-#missingCars <- missingCars %>% mutate(type = as.factor(type), wheels = as.factor(wheels), windows = as.factor(wheels))
-#missingCars[1, ]
-
 
 ### NOTES ###
 # Want to impute type based off of wheels and the other variables
@@ -29,7 +26,7 @@ KNNimpute <- function(data, k = 10, method = "mean", split_categorical = FALSE, 
   }
 
   # Jaccard distance
-  jaccard <- function(x){
+  jaccard <- function(x, y){
 
   }
   # Consider other norms
