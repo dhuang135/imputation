@@ -5,7 +5,7 @@ An Imputation Package in R that provides tools to fill in missing values in data
 ### Imputation
 1) `KNNimpute`: applies K-Nearest Neighbors to impute missing values. Works with both categorical and numeric data. Still refining the methodology and edge cases.
 2) `RegImpute`: applied regression techniques to impute missing values. Works with both categorical and numeric data. Still refining the methodology and edge cases.
-3) `RandomImpute`: a naive imputation technique that fills in missing values with randomly sampled values from each column. Note: will probably make this into just `Impute` with options `random`, `mean`, `median` to fill in the column values. 
+3) `Impute`: a naive imputation technique that fills in missing values with randomly sampled values from each column. Note: will probably make this into just `Impute` with options `random`, `mean`, `median` to fill in the column values. 
 ### General Functions
 1) `modifiedJaccard`: a modified version of the Jaccard index that works with both continuous and discrete data by scaling continuous variables (currently normally) and then determining if the observed values within the `band`s of the value we want to compare against.
 
