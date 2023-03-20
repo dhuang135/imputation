@@ -1,5 +1,6 @@
 # Function called KNNimpute
-#
+# Last Updated: 3/16/23
+
 
 # Some useful keyboard shortcuts for package authoring:
 #
@@ -7,6 +8,7 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 library(tidyverse)
+library(devtools)
 
 
 #Test data: Use only while writing package
@@ -34,14 +36,25 @@ data_clean = cars %>% drop_na()
 N <- (data_clean %>% dim)[1] #to get row number of non-NA entries
 
 KNNimputation <- function(data, k = 10, method = "mean", split_categorical = FALSE){
-  # This is a KNN imputation function
+### NOTES ###
+# Want to impute type based off of wheels and the other variables
+# Go through missing type and then take smallest jaccard index is good
+# Currently our function only utilizes one distance metric
 
+KNNimpute <- function(data, k = 10, method = "mean", split_categorical = FALSE, ties = "SOME METHOD"){
+  # This is a KNN imputation function
 
   ### Distance Metrics ###
   
   #NORM FUNCTION DOES NOT WORK WITH FACTORS 
+  # Euclidean distance
   norm <- function(x){
     return(sqrt(sum(x^2)))
+  }
+
+  # Jaccard distance
+  jaccard <- function(x, y){
+
   }
   # Consider other norms
 
